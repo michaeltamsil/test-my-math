@@ -71,13 +71,13 @@ class MyViewController : UIViewController {
 //        view.addSubview(assignment)
         
         
-        inputValue.isEnabled = false
-        inputValue.text="2938"
-        inputValue.backgroundColor = .red
-        inputValue.textColor = .blue
-        inputValue.frame = CGRect(x:10, y: 150, width: 260, height: 100)
-        inputValue.font = UIFont.systemFont(ofSize:100)
-        view.addSubview(inputValue)
+//        inputValue.isEnabled = false
+//        inputValue.text="2938"
+//        inputValue.backgroundColor = .red
+//        inputValue.textColor = .blue
+//        inputValue.frame = CGRect(x:10, y: 150, width: 260, height: 100)
+//        inputValue.font = UIFont.systemFont(ofSize:100)
+//        view.addSubview(inputValue)
         
         setViewButton(uIStackView: &stackViewBtn)
         stackViewBtn.addArrangedSubview(button1)
