@@ -4,6 +4,7 @@ import UIKit
 import PlaygroundSupport
 
 var title = UILabel()
+let question = funcQuestion()
 
 class MyViewController : UIViewController {
     var mainStackView = UIStackView()
@@ -11,6 +12,7 @@ class MyViewController : UIViewController {
     var stackViewBtn = UIStackView()
     var stackViewBtn2 = UIStackView()
     var stackViewBtn3 = UIStackView()
+    var stackViewBtn4 = UIStackView()
     let stackViewAllBtn = UIStackView()
     
     let button1 = createButton(message: "1")
@@ -24,10 +26,12 @@ class MyViewController : UIViewController {
     let button9 = createButton(message: "9")
     let button0 = createButton(message: "0")
     let buttonDot = createButton(message: ".")
+    let buttonMinus = createButton(message: "-")
     let buttonClear = createButton(message: "clear")
+    let buttonDone = createButton(message: "Done")
     
     let header = funcHeader()
-    let question = funcQuestion()
+    
     let answer = funcAnswer()
     
     override func loadView() {
@@ -53,27 +57,28 @@ class MyViewController : UIViewController {
         stackViewBtn3.addArrangedSubview(button9)
         stackViewBtn3.addArrangedSubview(button0)
         stackViewBtn3.addArrangedSubview(buttonDot)
-        stackViewBtn3.addArrangedSubview(buttonClear)
+        stackViewBtn3.addArrangedSubview(buttonMinus)
+        
+        setViewButton(uIStackView: &stackViewBtn4)
+        stackViewBtn4.addArrangedSubview(buttonClear)
+        stackViewBtn4.addArrangedSubview(buttonDone)
         
         stackViewAllBtn.backgroundColor = .red
         stackViewAllBtn.axis = .vertical
         stackViewAllBtn.alignment = .fill
         stackViewAllBtn.distribution = .fillEqually
-        stackViewAllBtn.spacing = 1
+        stackViewAllBtn.spacing = 10
         stackViewAllBtn.translatesAutoresizingMaskIntoConstraints = false
         stackViewAllBtn.addArrangedSubview(stackViewBtn)
         stackViewAllBtn.addArrangedSubview(stackViewBtn2)
         stackViewAllBtn.addArrangedSubview(stackViewBtn3)
+        stackViewAllBtn.addArrangedSubview(stackViewBtn4)
         
         mainStackView.addArrangedSubview(header)
         
         mainStackView.addArrangedSubview(question)
         mainStackView.addArrangedSubview(answer)
         mainStackView.addArrangedSubview(stackViewAllBtn)
-        
-        
-        
-        
         
         self.view = mainStackView
     }
@@ -84,13 +89,21 @@ class MyViewController : UIViewController {
     }
     
     @objc func buttonPressed(sender: UIButton!) {
-        print(sender.titleLabel?.text ?? "")
+        
         let text = sender.titleLabel?.text ?? ""
         if (text == "clear"){
             if let label = answer.viewWithTag(1) as? UILabel {
                 label.text = ""
             }
-        }else {
+        }else if (text == "Done"){
+            if let label = answer.viewWithTag(1) as? UILabel {
+                if (label.text?.isEmpty != true) {
+                    if let question = question.viewWithTag(1) as? UILabel {
+                        checkValue(questionMath: question.text ?? "", answer: label.text ?? "")
+                    }
+                }
+            }
+        }else{
             if let label = answer.viewWithTag(1) as? UILabel {
                 let newText = (label.text ?? "").isEmpty ? "" : label.text!
                 label.text = newText + text
@@ -113,8 +126,8 @@ func createButton(message: String) -> UIButton{
     let button = UIButton();
     button.setTitle(message, for: .normal)
     button.backgroundColor = .systemPink
-    button.layer.cornerRadius = 5
-    button.layer.borderWidth = 1
+    button.layer.cornerRadius = 10
+    button.layer.borderWidth = 2
     button.layer.borderColor = UIColor.black.cgColor
 
     button.addTarget(viewController, action: #selector((viewController.buttonPressed)), for: .touchUpInside)
@@ -142,7 +155,7 @@ func funcHeader() -> UIView{
     view.backgroundColor = .blue
     view.sizeToFit()
     
-    title.text = "Test my math skill"
+    title.text = "Test my math"
     title.textColor = .black
     title.font = title.font.withSize(42)
     title.backgroundColor = .red
@@ -157,11 +170,13 @@ func funcQuestion() -> UIView {
     let view = UIView()
     view.backgroundColor = .cyan
     let title = UILabel()
-    title.text = "90 x 43"
+    
+    title.text = randomQuestion()
     title.textColor = .black
     title.font = title.font.withSize(64)
     title.backgroundColor = .red
     title.sizeToFit()
+    title.tag = 1
     
     view.addSubview(title)
     return view
@@ -183,9 +198,46 @@ func funcAnswer() -> UIView {
     return view
 }
 
+func checkValue(questionMath : String, answer : String) -> Bool{
+    print (3.0 / 2)
+//    let expn = NSExpression(format: "4.0 * 3")
+//    let value = expn.expressionValue(with: nil, context: nil) as! Float
+//    print("question : ", value)
+
+    let alert = UIAlertController(title: "Alert", message: "this is an alert.", preferredStyle: .alert)
+    
+    let action1 = UIAlertAction(title: "Close", style:  .default, handler : { action in
+        if let question = question.viewWithTag(1) as? UILabel {
+            question.text = randomQuestion()
+        }
+    })
+    
+    alert.addAction(action1)
+    viewController.present(alert, animated: true, completion: nil)
+    return true
+    
+}
+
+func randomQuestion() -> String {
+    let number = Int.random(in: 1 ..< 100)
+    var number2 = 0
+    var _operator = "+"
+    if (number > 10){
+        _operator = ["+", "-"].randomElement()!
+    }else{
+        _operator = ["+", "-", "x"].randomElement()!
+    }
+    
+    if (_operator == "x"){
+        number2 = Int.random(in:1 ..< 11)
+    }else {
+        number2 = Int.random(in:1 ..< 100)
+    }
+    return String(number) + " " + String(_operator) + " " + String(number2)
+}
+
 
 // Present the view controller in the Live View window
 let viewController = MyViewController()
 
 PlaygroundPage.current.liveView = viewController
-
