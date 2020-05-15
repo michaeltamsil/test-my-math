@@ -25,12 +25,14 @@ class MyViewController : UIViewController {
     let button0 = createButton(message: "0")
     let buttonDot = createButton(message: ".")
     let buttonClear = createButton(message: "clear")
+    
     let header = funcHeader()
+    let question = funcQuestion()
+    let answer = funcAnswer()
     
     override func loadView() {
         
-        let question = funcQuestion()
-        let answer = funcAnswer()
+        
         //let mathQuestion = UILabel()
         
         setStackView(stackView: &mainStackView)
@@ -70,6 +72,9 @@ class MyViewController : UIViewController {
         mainStackView.addArrangedSubview(stackViewAllBtn)
         
         
+        
+        
+        
         self.view = mainStackView
     }
     
@@ -77,12 +82,28 @@ class MyViewController : UIViewController {
         super.viewDidLoad()
         setStackViewConstraints(stackView : &mainStackView)
     }
+    
+    @objc func buttonPressed(sender: UIButton!) {
+        print(sender.titleLabel?.text ?? "")
+        let text = sender.titleLabel?.text ?? ""
+        if (text == "clear"){
+            if let label = answer.viewWithTag(1) as? UILabel {
+                label.text = ""
+            }
+        }else {
+            if let label = answer.viewWithTag(1) as? UILabel {
+                let newText = (label.text ?? "").isEmpty ? "" : label.text!
+                label.text = newText + text
+                label.sizeToFit()
+            }
+        }
+    }
 }
 
 
 func setViewButton(uIStackView: inout UIStackView){
     uIStackView.axis = .horizontal
-    uIStackView.alignment = .firstBaseline
+    uIStackView.alignment = .fill
     uIStackView.distribution = .fillEqually
     uIStackView.spacing = 10
     //uIStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -95,13 +116,15 @@ func createButton(message: String) -> UIButton{
     button.layer.cornerRadius = 5
     button.layer.borderWidth = 1
     button.layer.borderColor = UIColor.black.cgColor
-    
+
+    button.addTarget(viewController, action: #selector((viewController.buttonPressed)), for: .touchUpInside)
     return button;
 }
 
 func setStackView(stackView: inout UIStackView) {
     stackView.axis = .vertical
     stackView.alignment = .fill
+    //stackView.distribution = .fillProportionally
     stackView.distribution = .fillEqually
 }
 
@@ -118,8 +141,6 @@ func funcHeader() -> UIView{
     
     view.backgroundColor = .blue
     view.sizeToFit()
-    
-    
     
     title.text = "Test my math skill"
     title.textColor = .black
@@ -141,6 +162,7 @@ func funcQuestion() -> UIView {
     title.font = title.font.withSize(64)
     title.backgroundColor = .red
     title.sizeToFit()
+    
     view.addSubview(title)
     return view
 }
@@ -150,11 +172,13 @@ func funcAnswer() -> UIView {
     view.backgroundColor = .green
     
     let answer = UILabel()
-    answer.text = "xxx"
     answer.textColor = .black
     answer.backgroundColor = .red
     answer.font = answer.font.withSize(64)
     answer.sizeToFit()
+    
+    answer.tag = 1
+    
     view.addSubview(answer)
     return view
 }
