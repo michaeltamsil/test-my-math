@@ -1,4 +1,4 @@
-# test-my-math
+# test my math
 
 ## Why
 - some people can't do simple math except using calculator, because of that it's takes time to tap on calculator, so it's better to do on our mind to do simple calculate
