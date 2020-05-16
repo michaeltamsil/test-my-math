@@ -86,6 +86,9 @@ class MyViewController : UIViewController {
     override func viewDidLoad(){
         super.viewDidLoad()
         setStackViewConstraints(stackView : &mainStackView)
+//            title.adjustsFontSizeToFitWidth = true
+//            title.textAlignment = .center
+            
     }
     
     @objc func buttonPressed(sender: UIButton!) {
@@ -137,7 +140,7 @@ func createButton(message: String) -> UIButton{
 func setStackView(stackView: inout UIStackView) {
     stackView.axis = .vertical
     stackView.alignment = .fill
-    //stackView.distribution = .fillProportionally
+//    stackView.distribution = .fillProportionally
     stackView.distribution = .fillEqually
 }
 
@@ -159,11 +162,11 @@ func funcHeader() -> UIView{
     title.textColor = .black
     title.font = title.font.withSize(42)
     title.backgroundColor = .red
+    title.tag = 1
     title.sizeToFit()
-    
     //view.height = 1
     view.addSubview(title)
-    
+
     return view
 }
 func funcQuestion() -> UIView {
@@ -177,6 +180,9 @@ func funcQuestion() -> UIView {
     title.backgroundColor = .red
     title.sizeToFit()
     title.tag = 1
+    
+    
+//    view.intrinsicContentSize(CGSize(width:1.0, height: 1.0))
     
     view.addSubview(title)
     return view
@@ -199,10 +205,19 @@ func funcAnswer() -> UIView {
 }
 
 func checkValue(questionMath : String, answer : String) -> Bool{
-    print (3.0 / 2)
-//    let expn = NSExpression(format: "4.0 * 3")
-//    let value = expn.expressionValue(with: nil, context: nil) as! Float
-//    print("question : ", value)
+    //print (3.0 / 2)
+    let expn = NSExpression(format: questionMath)
+    let value = expn.expressionValue(with: nil, context: nil) as! Float
+    let newAnswer = Int(answer)
+    let newValue = Int(value)
+    print("question : ", value )
+    print("answer : ", answer)
+    
+    if (newValue == newAnswer){
+        print("sama")
+    } else {
+        print("beda")
+    }
 
     let alert = UIAlertController(title: "Alert", message: "this is an alert.", preferredStyle: .alert)
     
@@ -241,3 +256,9 @@ func randomQuestion() -> String {
 let viewController = MyViewController()
 
 PlaygroundPage.current.liveView = viewController
+
+
+class CustomView: UIView {
+    var height = 1.0
+    
+}
