@@ -1,19 +1,27 @@
 //: A UIKit based Playground for presenting user interface
   
+
 import UIKit
 import PlaygroundSupport
+import AudioToolbox
+
+
 
 var title = UILabel()
+let header = funcHeader()
 let question = funcQuestion()
+let answer = funcAnswer()
 
 class MyViewController : UIViewController {
     var mainStackView = UIStackView()
     
+    let stackViewAllBtn = UIStackView()
+    
+
     var stackViewBtn = UIStackView()
     var stackViewBtn2 = UIStackView()
     var stackViewBtn3 = UIStackView()
     var stackViewBtn4 = UIStackView()
-    let stackViewAllBtn = UIStackView()
     
     let button1 = createButton(message: "1")
     let button2 = createButton(message: "2")
@@ -30,16 +38,27 @@ class MyViewController : UIViewController {
     let buttonClear = createButton(message: "clear")
     let buttonDone = createButton(message: "Done")
     
-    let header = funcHeader()
-    
-    let answer = funcAnswer()
-    
     override func loadView() {
-        
-        
-        //let mathQuestion = UILabel()
-        
+        self.view = mainStackView
         setStackView(stackView: &mainStackView)
+        
+        
+        mainStackView.addArrangedSubview(header)
+        mainStackView.addArrangedSubview(question)
+        mainStackView.addArrangedSubview(answer)
+        mainStackView.addArrangedSubview(stackViewAllBtn)
+        
+        stackViewAllBtn.backgroundColor = .red
+        stackViewAllBtn.axis = .vertical
+        stackViewAllBtn.alignment = .fill
+        stackViewAllBtn.distribution = .fillEqually
+        stackViewAllBtn.spacing = 10
+        stackViewAllBtn.translatesAutoresizingMaskIntoConstraints = false
+        
+        stackViewAllBtn.addArrangedSubview(stackViewBtn)
+        stackViewAllBtn.addArrangedSubview(stackViewBtn2)
+        stackViewAllBtn.addArrangedSubview(stackViewBtn3)
+        stackViewAllBtn.addArrangedSubview(stackViewBtn4)
         
         setViewButton(uIStackView: &stackViewBtn)
         stackViewBtn.addArrangedSubview(button1)
@@ -62,37 +81,16 @@ class MyViewController : UIViewController {
         setViewButton(uIStackView: &stackViewBtn4)
         stackViewBtn4.addArrangedSubview(buttonClear)
         stackViewBtn4.addArrangedSubview(buttonDone)
+
         
-        stackViewAllBtn.backgroundColor = .red
-        stackViewAllBtn.axis = .vertical
-        stackViewAllBtn.alignment = .fill
-        stackViewAllBtn.distribution = .fillEqually
-        stackViewAllBtn.spacing = 10
-        stackViewAllBtn.translatesAutoresizingMaskIntoConstraints = false
-        stackViewAllBtn.addArrangedSubview(stackViewBtn)
-        stackViewAllBtn.addArrangedSubview(stackViewBtn2)
-        stackViewAllBtn.addArrangedSubview(stackViewBtn3)
-        stackViewAllBtn.addArrangedSubview(stackViewBtn4)
-        
-        mainStackView.addArrangedSubview(header)
-        
-        mainStackView.addArrangedSubview(question)
-        mainStackView.addArrangedSubview(answer)
-        mainStackView.addArrangedSubview(stackViewAllBtn)
-        
-        self.view = mainStackView
     }
     
     override func viewDidLoad(){
         super.viewDidLoad()
         setStackViewConstraints(stackView : &mainStackView)
-//            title.adjustsFontSizeToFitWidth = true
-//            title.textAlignment = .center
-            
     }
     
     @objc func buttonPressed(sender: UIButton!) {
-        
         let text = sender.titleLabel?.text ?? ""
         if (text == "clear"){
             if let label = answer.viewWithTag(1) as? UILabel {
@@ -102,7 +100,7 @@ class MyViewController : UIViewController {
             if let label = answer.viewWithTag(1) as? UILabel {
                 if (label.text?.isEmpty != true) {
                     if let question = question.viewWithTag(1) as? UILabel {
-                        checkValue(questionMath: question.text ?? "", answer: label.text ?? "")
+                        checkValue(questionMath: question.text ?? "", answerMath: label.text ?? "")
                     }
                 }
             }
@@ -141,7 +139,7 @@ func setStackView(stackView: inout UIStackView) {
     stackView.axis = .vertical
     stackView.alignment = .fill
 //    stackView.distribution = .fillProportionally
-    stackView.distribution = .fillEqually
+    stackView.distribution = .fill
 }
 
 func setStackViewConstraints(stackView: inout UIStackView) {
@@ -156,17 +154,31 @@ func funcHeader() -> UIView{
     let view = UIView()
     
     view.backgroundColor = .blue
-    view.sizeToFit()
+    //view.sizeToFit()
     
-    title.text = "Test my math"
+    title.text = "What is"
     title.textColor = .black
-    title.font = title.font.withSize(42)
+    title.font = title.font.withSize(62)
     title.backgroundColor = .red
-    title.tag = 1
     title.sizeToFit()
-    //view.height = 1
-    view.addSubview(title)
+    title.tag = 1
+    
+//    title.translatesAutoresizingMaskIntoConstraints = false
+    
+//    title.addConstraint(NSLayoutConstraint(item: title, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 21))
+//    title.addConstraint(NSLayoutConstraint(item: title, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 300))
+//
 
+    view.translatesAutoresizingMaskIntoConstraints = false
+    view.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        
+//    title.translatesAutoresizingMaskIntoConstraints = false
+//    title.trailingAnchor.constraint(equalTo:
+//        view.safeAreaLayoutGuide.trailingAnchor, constant: 20).isActive
+//    title.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20).isActive
+
+    view.addSubview(title)
+    
     return view
 }
 func funcQuestion() -> UIView {
@@ -181,10 +193,14 @@ func funcQuestion() -> UIView {
     title.sizeToFit()
     title.tag = 1
     
-    
-//    view.intrinsicContentSize(CGSize(width:1.0, height: 1.0))
+    view.translatesAutoresizingMaskIntoConstraints = false
+    view.heightAnchor.constraint(equalToConstant: 100).isActive = true
+
+//    title.translatesAutoresizingMaskIntoConstraints = false
+//    title.widthAnchor.constraint(equalToConstant: view.bounds.size.width).isActive = true
     
     view.addSubview(title)
+    
     return view
 }
 
@@ -197,37 +213,61 @@ func funcAnswer() -> UIView {
     answer.backgroundColor = .red
     answer.font = answer.font.withSize(64)
     answer.sizeToFit()
-    
     answer.tag = 1
+    
+    view.translatesAutoresizingMaskIntoConstraints = false
+    view.heightAnchor.constraint(equalToConstant: 100).isActive = true
     
     view.addSubview(answer)
     return view
 }
 
-func checkValue(questionMath : String, answer : String) -> Bool{
-    //print (3.0 / 2)
-    let expn = NSExpression(format: questionMath)
-    let value = expn.expressionValue(with: nil, context: nil) as! Float
-    let newAnswer = Int(answer)
-    let newValue = Int(value)
-    print("question : ", value )
-    print("answer : ", answer)
+func checkValue(questionMath : String, answerMath : String) -> Bool{
+    let successIcon = ["😃","😄","😍","😎","🤩","🥳","🤗","😊"]
     
+    let successMessage = ["Welldone", "Wow", "You done well", "You did it", "Awesome", "Cool", "Perfect", "Yes, it's success"]
+    
+    var newQuestionMath = questionMath.replacingOccurrences(of: "?", with: "")
+    newQuestionMath = newQuestionMath.replacingOccurrences(of: "x", with: "*")
+    
+    let expn = NSExpression(format: newQuestionMath)
+    let value = expn.expressionValue(with: nil, context: nil) as! Float
+    let newAnswer = Int(answerMath)
+    let newValue = Int(value)
+    var alert = UIAlertController()
+    
+    print("question : ", newValue )
+    print("answer : ", newAnswer! )
+
     if (newValue == newAnswer){
-        print("sama")
+        print("same")
+        var newMessage = successIcon.randomElement()! + ", "
+        newMessage += successMessage.randomElement()!
+        
+        alert = UIAlertController(title: "Success", message: newMessage, preferredStyle: .alert)
+        let action1 = UIAlertAction(title: "Close", style:  .default, handler : { action in
+            if let question = question.viewWithTag(1) as? UILabel {
+                question.text = randomQuestion()
+                question.sizeToFit()
+            }
+            if let UILabelAnswer = answer.viewWithTag(1) as? UILabel {
+                UILabelAnswer.text = ""
+                question.sizeToFit()
+            }
+        })
+        alert.addAction(action1)
     } else {
-        print("beda")
+        print("different")
+        alert = UIAlertController(title: "Wrong", message: "sad", preferredStyle: .alert)
+        let action1 = UIAlertAction(title: "Close", style:  .default, handler : { action in
+            if let UILabelAnswer = answer.viewWithTag(1) as? UILabel {
+                UILabelAnswer.text = ""
+                question.sizeToFit()
+            }
+        })
+        alert.addAction(action1)
     }
 
-    let alert = UIAlertController(title: "Alert", message: "this is an alert.", preferredStyle: .alert)
-    
-    let action1 = UIAlertAction(title: "Close", style:  .default, handler : { action in
-        if let question = question.viewWithTag(1) as? UILabel {
-            question.text = randomQuestion()
-        }
-    })
-    
-    alert.addAction(action1)
     viewController.present(alert, animated: true, completion: nil)
     return true
     
@@ -248,7 +288,12 @@ func randomQuestion() -> String {
     }else {
         number2 = Int.random(in:1 ..< 100)
     }
-    return String(number) + " " + String(_operator) + " " + String(number2)
+    
+    
+    //NSSound(named: "Purr")?.play()
+//    NSSound()
+    
+    return String(number) + " " + String(_operator) + " " + String(number2) + " ?"
 }
 
 
@@ -256,9 +301,3 @@ func randomQuestion() -> String {
 let viewController = MyViewController()
 
 PlaygroundPage.current.liveView = viewController
-
-
-class CustomView: UIView {
-    var height = 1.0
-    
-}
