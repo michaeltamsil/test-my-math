@@ -8,3 +8,6 @@
 - read the math quotation
 - answer it by tap numbers and shown on middle screen as the answer
 - tap button "done" and see whether right or wrong, wrong or right will give message and after seconds will random the equotation
+
+## Picture
+![]("./images.png")

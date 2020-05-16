@@ -236,37 +236,39 @@ func checkValue(questionMath : String, answerMath : String) -> Bool{
     let newValue = Int(value)
     var alert = UIAlertController()
     
-    print("question : ", newValue )
-    print("answer : ", newAnswer! )
-
-    if (newValue == newAnswer){
-        print("same")
-        var newMessage = successIcon.randomElement()! + ", "
-        newMessage += successMessage.randomElement()!
+        print("question : ", newValue )
+        print("answer : ", newAnswer ?? 0 )
+        let isSame = newValue == newAnswer
         
-        alert = UIAlertController(title: "Success", message: newMessage, preferredStyle: .alert)
-        let action1 = UIAlertAction(title: "Close", style:  .default, handler : { action in
-            if let question = question.viewWithTag(1) as? UILabel {
-                question.text = randomQuestion()
-                question.sizeToFit()
-            }
-            if let UILabelAnswer = answer.viewWithTag(1) as? UILabel {
-                UILabelAnswer.text = ""
-                question.sizeToFit()
-            }
-        })
-        alert.addAction(action1)
-    } else {
-        print("different")
-        alert = UIAlertController(title: "Wrong", message: "sad", preferredStyle: .alert)
-        let action1 = UIAlertAction(title: "Close", style:  .default, handler : { action in
-            if let UILabelAnswer = answer.viewWithTag(1) as? UILabel {
-                UILabelAnswer.text = ""
-                question.sizeToFit()
-            }
-        })
-        alert.addAction(action1)
-    }
+        if ( isSame ){
+            print("same")
+            var newMessage = successIcon.randomElement()! + ", "
+            newMessage += successMessage.randomElement()!
+            
+            alert = UIAlertController(title: "Success", message: newMessage, preferredStyle: .alert)
+            let action1 = UIAlertAction(title: "Close", style:  .default, handler : { action in
+                if let question = question.viewWithTag(1) as? UILabel {
+                    question.text = randomQuestion()
+                    question.sizeToFit()
+                }
+                if let UILabelAnswer = answer.viewWithTag(1) as? UILabel {
+                    UILabelAnswer.text = ""
+                    question.sizeToFit()
+                }
+            })
+            alert.addAction(action1)
+        } else {
+            print("different")
+            alert = UIAlertController(title: "Wrong", message: "sad", preferredStyle: .alert)
+            let action1 = UIAlertAction(title: "Close", style:  .default, handler : { action in
+                if let UILabelAnswer = answer.viewWithTag(1) as? UILabel {
+                    UILabelAnswer.text = ""
+                    question.sizeToFit()
+                }
+            })
+            alert.addAction(action1)
+        }
+    
 
     viewController.present(alert, animated: true, completion: nil)
     return true
