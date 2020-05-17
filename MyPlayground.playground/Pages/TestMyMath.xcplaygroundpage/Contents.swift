@@ -3,14 +3,13 @@
 
 import UIKit
 import PlaygroundSupport
-import AudioToolbox
-
-
+import AVFoundation
 
 var title = UILabel()
 let header = funcHeader()
 let question = funcQuestion()
 let answer = funcAnswer()
+
 
 class MyViewController : UIViewController {
     var mainStackView = UIStackView()
@@ -41,7 +40,6 @@ class MyViewController : UIViewController {
     override func loadView() {
         self.view = mainStackView
         setStackView(stackView: &mainStackView)
-        
         
         mainStackView.addArrangedSubview(header)
         mainStackView.addArrangedSubview(question)
@@ -91,6 +89,11 @@ class MyViewController : UIViewController {
     }
     
     @objc func buttonPressed(sender: UIButton!) {
+        
+        // begin play sound
+            playSoundButton()
+        // end play sound
+
         let text = sender.titleLabel?.text ?? ""
         if (text == "clear"){
             if let label = answer.viewWithTag(1) as? UILabel {
@@ -120,7 +123,6 @@ func setViewButton(uIStackView: inout UIStackView){
     uIStackView.alignment = .fill
     uIStackView.distribution = .fillEqually
     uIStackView.spacing = 10
-    //uIStackView.translatesAutoresizingMaskIntoConstraints = false
 }
 
 func createButton(message: String) -> UIButton{
@@ -138,7 +140,6 @@ func createButton(message: String) -> UIButton{
 func setStackView(stackView: inout UIStackView) {
     stackView.axis = .vertical
     stackView.alignment = .fill
-//    stackView.distribution = .fillProportionally
     stackView.distribution = .fill
 }
 
@@ -153,29 +154,15 @@ func setStackViewConstraints(stackView: inout UIStackView) {
 func funcHeader() -> UIView{
     let view = UIView()
     
-    view.backgroundColor = .blue
-    //view.sizeToFit()
-    
     title.text = "What is"
     title.textColor = .black
     title.font = title.font.withSize(62)
     title.backgroundColor = .red
     title.sizeToFit()
     title.tag = 1
-    
-//    title.translatesAutoresizingMaskIntoConstraints = false
-    
-//    title.addConstraint(NSLayoutConstraint(item: title, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 21))
-//    title.addConstraint(NSLayoutConstraint(item: title, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 300))
-//
 
     view.translatesAutoresizingMaskIntoConstraints = false
     view.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        
-//    title.translatesAutoresizingMaskIntoConstraints = false
-//    title.trailingAnchor.constraint(equalTo:
-//        view.safeAreaLayoutGuide.trailingAnchor, constant: 20).isActive
-//    title.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20).isActive
 
     view.addSubview(title)
     
@@ -183,7 +170,6 @@ func funcHeader() -> UIView{
 }
 func funcQuestion() -> UIView {
     let view = UIView()
-    view.backgroundColor = .cyan
     let title = UILabel()
     
     title.text = randomQuestion()
@@ -196,9 +182,6 @@ func funcQuestion() -> UIView {
     view.translatesAutoresizingMaskIntoConstraints = false
     view.heightAnchor.constraint(equalToConstant: 100).isActive = true
 
-//    title.translatesAutoresizingMaskIntoConstraints = false
-//    title.widthAnchor.constraint(equalToConstant: view.bounds.size.width).isActive = true
-    
     view.addSubview(title)
     
     return view
@@ -206,7 +189,6 @@ func funcQuestion() -> UIView {
 
 func funcAnswer() -> UIView {
     let view = UIView()
-    view.backgroundColor = .green
     
     let answer = UILabel()
     answer.textColor = .black
@@ -242,6 +224,8 @@ func checkValue(questionMath : String, answerMath : String) -> Bool{
         
         if ( isSame ){
             print("same")
+            playSoundSuccess()
+            
             var newMessage = successIcon.randomElement()! + ", "
             newMessage += successMessage.randomElement()!
             
@@ -259,7 +243,8 @@ func checkValue(questionMath : String, answerMath : String) -> Bool{
             alert.addAction(action1)
         } else {
             print("different")
-            alert = UIAlertController(title: "Wrong", message: "sad", preferredStyle: .alert)
+            playSoundFail()
+            alert = UIAlertController(title: "Wrong", message: "try again", preferredStyle: .alert)
             let action1 = UIAlertAction(title: "Close", style:  .default, handler : { action in
                 if let UILabelAnswer = answer.viewWithTag(1) as? UILabel {
                     UILabelAnswer.text = ""
@@ -303,3 +288,41 @@ func randomQuestion() -> String {
 let viewController = MyViewController()
 
 PlaygroundPage.current.liveView = viewController
+
+
+func playSoundButton() {
+    let soundURL = Bundle.main.url(forResource: "sound/button/zapsplat_multimedia_click", withExtension: "mp3")
+    var tapSound: SystemSoundID = 0
+    AudioServicesCreateSystemSoundID(soundURL! as CFURL, &tapSound)
+
+    AudioServicesPlaySystemSound(tapSound)
+}
+
+func playSoundFail() {
+    let soundURL = Bundle.main.url(forResource: "sound/fail/studio-audience-awwww-sound-fx", withExtension: "mp3")
+    var tapSound: SystemSoundID = 0
+    AudioServicesCreateSystemSoundID(soundURL! as CFURL, &tapSound)
+
+    AudioServicesPlaySystemSound(tapSound)
+}
+
+func playSoundSuccess(){
+    var file = [
+        "human_group_children_x6_uk_aged_3_to_8_shout_cheer_clap",
+                "zapsplat_human_children_x5_under_10_english_cheer_44945",
+                "human_audience_comedy_club_komedia_comic_boom_person_cheer_clap_audience_tone_background",
+                "kids_cheering",
+                "applause_spIfYBg",
+                "human_clapping_8_people"
+        ].randomElement()
+    
+    file = String("sound/success/" + file!)
+    print (file ?? "")
+    
+    let soundURL = Bundle.main.url(forResource: file, withExtension: "mp3")
+    var tapSound: SystemSoundID = 0
+    AudioServicesCreateSystemSoundID(soundURL! as CFURL, &tapSound)
+
+    AudioServicesPlaySystemSound(tapSound)
+    
+}
