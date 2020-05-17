@@ -9,5 +9,10 @@
 - answer it by tap numbers and shown on middle screen as the answer
 - tap button "done" and see whether right or wrong, wrong or right will give message and after seconds will random the equotation
 
+## updated
+- add alert whether fail & success
+- have sound when button is tapped
+- if fail / success will play audio
+
 ## Picture
 ![](./images.png)
