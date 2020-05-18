@@ -13,7 +13,7 @@
 i take it by my self this spring 2020
 ![](./images.png)
 
-
+## Creadits
 im using sound from
 
 ### [zapsplat.com](https://www.zapsplat.com/)
@@ -26,3 +26,6 @@ human_audience_comedy_club_komedia_comic_boom_person_cheer_clap_audience_tone_ba
 kids_cheering
 applause_spIfYBg
 human_clapping_8_people
+
+## Images
+images i photo by my self this May 2020
