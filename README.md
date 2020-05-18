@@ -10,6 +10,7 @@
 - tap button "done" and see whether right or wrong, wrong or right will give message and after seconds will random the equotation
 
 ## Picture
+i take it by my self this spring 2020
 ![](./images.png)
 
 
