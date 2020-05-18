@@ -10,6 +10,8 @@ let header = funcHeader()
 let question = funcQuestion()
 let answer = funcAnswer()
 let mainView = UIView()
+let backgroundImage = UIImageView(frame: CGRect(x: -200, y: 0, width: 670, height: 670))
+
 
 class MyViewController : UIViewController {
     var mainStackView = UIStackView()
@@ -38,12 +40,17 @@ class MyViewController : UIViewController {
     
     override func loadView() {
         self.view = mainView
-        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "1-min.jpg")!)
+        
+        //self.view.backgroundColor = UIColor(patternImage: UIImage(named: "1-min.jpg")!)
         
         
         mainView.addSubview(mainStackView)
         
         
+        
+        backgroundImage.image = UIImage(named: randomImageUrl())
+        backgroundImage.contentMode =  UIView.ContentMode.scaleToFill
+        self.view.insertSubview(backgroundImage, at: 0)
         
         //let background = UIImageView
 //        mainView.addSubview(mainStackView)
@@ -97,6 +104,18 @@ class MyViewController : UIViewController {
     override func viewDidLoad(){
         super.viewDidLoad()
 
+//        UIGraphicsBeginImageContext(self.view.frame.size)
+//        UIImage(named: "2-min.jpg")?.draw(in: self.view.bounds)
+        
+//        if let image = UIGraphicsGetImageFromCurrentImageContext() {
+//             UIGraphicsEndImageContext()
+//        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "2-min.jpg", in: self.view.bounds))
+        
+        
+//        }else {
+//            UIGraphicsEndImageContext()
+//            debugPrint("image not available")
+//        }
         
         
         setStackViewConstraints(stackView : &mainStackView)
@@ -274,6 +293,7 @@ func checkValue(questionMath : String, answerMath : String) -> Bool{
                     UILabelAnswer.text = ""
                     question.sizeToFit()
                 }
+                backgroundImage.image = UIImage(named: randomImageUrl())
             })
             alert.addAction(action1)
         } else {
@@ -356,4 +376,8 @@ func playSoundSuccess(){
 
     AudioServicesPlaySystemSound(tapSound)
     
+}
+
+func randomImageUrl() -> String {
+    return String(Int.random(in:1...11)) + "-min.jpg"
 }
