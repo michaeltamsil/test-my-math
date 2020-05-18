@@ -13,7 +13,7 @@
 i take it by my self this spring 2020
 ![](./images.png)
 
-## Creadits
+## Credits
 im using sound from
 
 ### [zapsplat.com](https://www.zapsplat.com/)
