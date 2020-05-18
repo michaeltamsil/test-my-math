@@ -9,14 +9,13 @@ var title = UILabel()
 let header = funcHeader()
 let question = funcQuestion()
 let answer = funcAnswer()
-
+let mainView = UIView()
 
 class MyViewController : UIViewController {
     var mainStackView = UIStackView()
     
     let stackViewAllBtn = UIStackView()
     
-
     var stackViewBtn = UIStackView()
     var stackViewBtn2 = UIStackView()
     var stackViewBtn3 = UIStackView()
@@ -38,7 +37,20 @@ class MyViewController : UIViewController {
     let buttonDone = createButton(message: "Done")
     
     override func loadView() {
-        self.view = mainStackView
+        self.view = mainView
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "1-min.jpg")!)
+        
+        
+        mainView.addSubview(mainStackView)
+        
+        
+        
+        //let background = UIImageView
+//        mainView.addSubview(mainStackView)
+//                self.view = mainStackView
+        
+        
+        
         setStackView(stackView: &mainStackView)
         
         mainStackView.addArrangedSubview(header)
@@ -46,7 +58,7 @@ class MyViewController : UIViewController {
         mainStackView.addArrangedSubview(answer)
         mainStackView.addArrangedSubview(stackViewAllBtn)
         
-        stackViewAllBtn.backgroundColor = .red
+        //stackViewAllBtn.backgroundColor = .red
         stackViewAllBtn.axis = .vertical
         stackViewAllBtn.alignment = .fill
         stackViewAllBtn.distribution = .fillEqually
@@ -80,12 +92,27 @@ class MyViewController : UIViewController {
         stackViewBtn4.addArrangedSubview(buttonClear)
         stackViewBtn4.addArrangedSubview(buttonDone)
 
-        
     }
     
     override func viewDidLoad(){
         super.viewDidLoad()
+
+        
+        
         setStackViewConstraints(stackView : &mainStackView)
+//        self.view.backgroundColor = .green
+        
+//        var newFrame = mainView.frame
+//        newFrame.size.width = 2000
+//        newFrame.size.height = 2000
+//        mainView.frame = newFrame
+    }
+    
+    
+    override func viewDidAppear(_ animated: Bool){
+        
+        let screenSize : CGRect = UIScreen.main.bounds
+        print (screenSize.width)
     }
     
     @objc func buttonPressed(sender: UIButton!) {
@@ -128,10 +155,11 @@ func setViewButton(uIStackView: inout UIStackView){
 func createButton(message: String) -> UIButton{
     let button = UIButton();
     button.setTitle(message, for: .normal)
-    button.backgroundColor = .systemPink
+    button.backgroundColor = #colorLiteral(red: 0.4023760259, green: 0.8610525727, blue: 1, alpha: 1)
     button.layer.cornerRadius = 10
     button.layer.borderWidth = 2
     button.layer.borderColor = UIColor.black.cgColor
+    button.setTitleColor(UIColor.black, for: .normal)
 
     button.addTarget(viewController, action: #selector((viewController.buttonPressed)), for: .touchUpInside)
     return button;
@@ -144,28 +172,33 @@ func setStackView(stackView: inout UIStackView) {
 }
 
 func setStackViewConstraints(stackView: inout UIStackView) {
-    stackView.translatesAutoresizingMaskIntoConstraints
-    stackView.topAnchor.constraint(equalTo: viewController.view.bottomAnchor, constant: 20).isActive
-    stackView.leadingAnchor.constraint(equalTo: viewController.view.leadingAnchor, constant: 50).isActive
-    stackView.trailingAnchor.constraint(equalTo: viewController.view.safeAreaLayoutGuide.trailingAnchor, constant: -20).isActive
-    stackView.bottomAnchor.constraint(equalTo: viewController.view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive
+    stackView.translatesAutoresizingMaskIntoConstraints = false
+//    stackView.topAnchor.constraint(equalTo: viewController.view.topAnchor, constant: 0).isActive
+//    stackView.leadingAnchor.constraint(equalTo: viewController.view.leadingAnchor, constant: 0).isActive
+//    stackView.trailingAnchor.constraint(equalTo: viewController.view.safeAreaLayoutGuide.trailingAnchor, constant: 20).isActive
+//    stackView.bottomAnchor.constraint(equalTo: viewController.view.bottomAnchor, constant: -20).isActive
+//    let width =
+//    print(width)
+    stackView.widthAnchor.constraint(equalToConstant:375).isActive = true
+    stackView.heightAnchor.constraint(equalToConstant:668).isActive = true
+    
 }
 
 func funcHeader() -> UIView{
     let view = UIView()
     
+    
     title.text = "What is"
     title.textColor = .black
-    title.font = title.font.withSize(62)
-    title.backgroundColor = .red
+    title.font = title.font.withSize(70)
+    //title.backgroundColor = .red
     title.sizeToFit()
     title.tag = 1
 
     view.translatesAutoresizingMaskIntoConstraints = false
-    view.heightAnchor.constraint(equalToConstant: 80).isActive = true
+    view.heightAnchor.constraint(equalToConstant: 100).isActive = true
 
     view.addSubview(title)
-    
     return view
 }
 func funcQuestion() -> UIView {
@@ -174,14 +207,15 @@ func funcQuestion() -> UIView {
     
     title.text = randomQuestion()
     title.textColor = .black
-    title.font = title.font.withSize(64)
-    title.backgroundColor = .red
+    title.font = title.font.withSize(70)
+    //title.backgroundColor = .red
     title.sizeToFit()
     title.tag = 1
     
     view.translatesAutoresizingMaskIntoConstraints = false
     view.heightAnchor.constraint(equalToConstant: 100).isActive = true
 
+//    view.backgroundColor = .orange // can be deleted
     view.addSubview(title)
     
     return view
@@ -192,14 +226,15 @@ func funcAnswer() -> UIView {
     
     let answer = UILabel()
     answer.textColor = .black
-    answer.backgroundColor = .red
-    answer.font = answer.font.withSize(64)
+    //answer.backgroundColor = .red
+    answer.font = answer.font.withSize(70)
     answer.sizeToFit()
     answer.tag = 1
     
     view.translatesAutoresizingMaskIntoConstraints = false
-    view.heightAnchor.constraint(equalToConstant: 100).isActive = true
+    view.heightAnchor.constraint(equalToConstant: 200).isActive = true
     
+//    view.backgroundColor = .yellow  // can be deleted
     view.addSubview(answer)
     return view
 }
@@ -275,10 +310,6 @@ func randomQuestion() -> String {
     }else {
         number2 = Int.random(in:1 ..< 100)
     }
-    
-    
-    //NSSound(named: "Purr")?.play()
-//    NSSound()
     
     return String(number) + " " + String(_operator) + " " + String(number2) + " ?"
 }
